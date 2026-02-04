@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты Класса</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+
+        .student-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .student-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .active-selection {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">Наш Класс</h1>
+            <p class="text-slate-500">Электронный справочник контактов</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Column: Search & List -->
+            <div class="lg:col-span-1 flex flex-col gap-4">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-slate-400"></i>
+                    <input type="text" id="searchInput" placeholder="Поиск по имени..." 
+                        class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-sm">
+                </div>
+
+                <div id="studentList" class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-y-auto max-h-[600px] p-2 space-y-1">
+                    <!-- Students will be injected here -->
+                </div>
+            </div>
+
+            <!-- Right Column: Detail View -->
+            <div class="lg:col-span-2">
+                <div id="welcomeScreen" class="h-full flex flex-col items-center justify-center p-12 bg-white rounded-3xl border border-dashed border-slate-300 text-slate-400">
+                    <i class="fa-solid fa-address-card text-6xl mb-4 opacity-20"></i>
+                    <p class="text-lg">Выберите ученика из списка слева</p>
+                </div>
+
+                <div id="detailCard" class="hidden bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+                    <div class="h-32 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+                    <div class="px-8 pb-8">
+                        <div class="relative flex justify-between items-end -mt-12 mb-6">
+                            <div class="w-24 h-24 bg-white rounded-2xl shadow-lg flex items-center justify-center text-4xl font-bold text-blue-600 border-4 border-white" id="initials">
+                                AI
+                            </div>
+                        </div>
+                        
+                        <h2 id="fullName" class="text-2xl font-bold text-slate-800 mb-1">ФИО ученика</h2>
+                        <p class="text-slate-500 mb-6 flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap"></i> Ученик класса
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Phone -->
+                            <div class="p-4 bg-slate-50 rounded-2xl">
+                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Телефон</p>
+                                <a id="phoneLink" href="#" class="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"></a>
+                            </div>
+
+                            <!-- Socials Container -->
+                            <div id="socialsContainer" class="flex flex-col gap-3">
+                                <!-- Social items injected here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                    <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <div>
+                    <p class="text-xs uppercase font-bold tracking-tight">Классный руководитель</p>
+                    <p class="text-slate-800 font-medium">Максютова Елена Евгеньевна</p>
+                </div>
+            </div>
+            <p class="text-sm">2024 &copy; Контакты Класса</p>
+        </footer>
+    </div>
+
+    <script>
+        const students = [
+            { name: "Абдрахманов Ильгизар Ильнурович", phone: "8 (917) 874-21-74", socials: [] },
+            { name: "Акчурина Карина Рушановна", phone: "+7 (952) 041-65-51", socials: [{ type: 'vk', url: 'https://vk.ru/id611094039' }] },
+            { name: "Аляев Николай Сергеевич", phone: "+7 (996) 902-60-92", socials: [{ type: 'tg', user: '@Glopol67' }, { type: 'tt', user: '@ctareiz' }] },
+            { name: "Брендин Савелий Максимович", phone: "+7 (919) 694-61-72", socials: [{ type: 'vk', url: 'https://vk.ru/id878227362' }] },
+            { name: "Гаранина Виктория Алексеевна", phone: "+79534800098", socials: [{ type: 'tg', user: '@chivikaaaa' }, { type: 'tt', user: '@vikooo432' }, { type: 'vk', url: 'https://vk.ru/id825609441' }] },
+            { name: "Егоров Денис Дмитриевна", phone: "+7 939 379 9827", socials: [{ type: 'vk', url: 'https://vk.ru/id820868637' }, { type: 'tg', user: '@Namazzzzzzzzzzzzzzzzz' }] },
+            { name: "Ермолаева София Дмитриевна", phone: "+7 (904) 761-94-67", socials: [{ type: 'tt', user: '@sofia76055' }, { type: 'vk', url: 'https://vk.ru/id775933792' }, { type: 'tg', user: '@Sofkari' }] },
+            { name: "Мананникова Диана Владимировна", phone: "+7 939 375 2090", socials: [{ type: 'vk', url: 'https://vk.ru/id772710781' }, { type: 'tg', user: '@dishkaxxj' }] },
+            { name: "Мартынова Арина Николаевна", phone: "+7 (967) 361-71-77", socials: [] },
+            { name: "Мишагин Никита Сергеевич", phone: "+7 939 107 94 44", socials: [] },
+            { name: "Савыкова Милана Артемовна", phone: "+7 (967) 371-97-17", socials: [{ type: 'tg', user: '@fggggea' }] },
+            { name: "Саенко Владимир Андреевич", phone: "+7 (996) 904-24-45", socials: [{ type: 'vk', url: 'https://vk.ru/id896835103' }, { type: 'tg', user: '@Shan_Hvan' }] },
+            { name: "Самолетов Данил Алексеевич", phone: "+7 (905) 375-50-64", socials: [{ type: 'vk', url: 'https://vk.ru/id762048139' }, { type: 'tg', user: '@Frog_hahah' }] },
+            { name: "Сергеечева Арина Владиславовна", phone: "+7 (927) 247-43-91", socials: [] },
+            { name: "Стариков Даниил Сергеевич", phone: "+7 (902) 719-55-38", socials: [{ type: 'tt', user: '@thegus1ks' }, { type: 'tg', user: '@Cheliks2280' }] },
+            { name: "Трушалиев Вильдан Жасланович", phone: "+7 (917) 937-21-98", socials: [{ type: 'tt', user: '@legenda7439' }, { type: 'vk', url: 'https://vk.ru/id759941935' }, { type: 'tg', user: '@Bankai_tt99' }] },
+            { name: "Хафизова Аделина Радиковна", phone: "+7 996 826 9174", socials: [{ type: 'tg', user: '@cmheel01' }] },
+            { name: "Шилягин Даниил Витальевич", phone: "+7 (952) 038-32-17", socials: [{ type: 'tt', user: '@user7258571907910' }, { type: 'vk', url: 'https://vk.ru/id769023781' }, { type: 'tg', user: '@Alec198' }] },
+            { name: "Яруллин Ильнур Амирович", phone: "+7 (917) 875-83-34", socials: [{ type: 'tt', user: '@xays819' }, { type: 'vk', url: 'https://vk.ru/id860720515' }, { type: 'tg', user: '@spROvNwcdH' }] },
+            { name: "Яшлавский Эмиль Эдемович", phone: "+7 987 060 8155", socials: [{ type: 'tt', user: '@emilka228edits' }, { type: 'tg', user: '@ecoswater' }] }
+        ];
+
+        const studentList = document.getElementById('studentList');
+        const searchInput = document.getElementById('searchInput');
+        const detailCard = document.getElementById('detailCard');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+
+        function renderList(filter = '') {
+            studentList.innerHTML = '';
+            students.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()))
+                .forEach((s, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'p-3 flex items-center gap-3 cursor-pointer rounded-xl hover:bg-slate-50 transition-colors border border-transparent student-btn';
+                    div.innerHTML = `
+                        <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">
+                            ${s.name.charAt(0)}
+                        </div>
+                        <span class="text-slate-700 font-medium text-sm truncate">${s.name}</span>
+                    `;
+                    div.onclick = () => showDetail(s, div);
+                    studentList.appendChild(div);
+                });
+        }
+
+        function showDetail(student, el) {
+            // UI state
+            document.querySelectorAll('.student-btn').forEach(btn => btn.classList.remove('active-selection', 'bg-blue-50'));
+            el.classList.add('active-selection', 'bg-blue-50');
+            
+            welcomeScreen.classList.add('hidden');
+            detailCard.classList.remove('hidden');
+
+            // Data mapping
+            document.getElementById('fullName').textContent = student.name;
+            document.getElementById('initials').textContent = student.name.split(' ').map(n => n[0]).join('').substring(0,2);
+            
+            const phoneClean = student.phone.replace(/\D/g, '');
+            const phoneEl = document.getElementById('phoneLink');
+            phoneEl.textContent = student.phone;
+            phoneEl.href = `tel:${student.phone}`;
+
+            const socialsBox = document.getElementById('socialsContainer');
+            socialsBox.innerHTML = '';
+
+            if (student.socials.length === 0) {
+                socialsBox.innerHTML = '<p class="text-slate-400 text-sm italic">Социальные сети не указаны</p>';
+            } else {
+                student.socials.forEach(soc => {
+                    let btn = document.createElement('a');
+                    btn.target = "_blank";
+                    btn.className = "flex items-center justify-between p-3 rounded-xl transition-all hover:opacity-80 text-white font-medium";
+                    
+                    if (soc.type === 'vk') {
+                        btn.href = soc.url;
+                        btn.style.backgroundColor = '#0077FF';
+                        btn.innerHTML = `<span><i class="fa-brands fa-vk mr-2"></i> ВКонтакте</span> <i class="fa-solid fa-arrow-up-right-from-square text-xs opacity-50"></i>`;
+                    } else if (soc.type === 'tg') {
+                        btn.href = `https://t.me/${soc.user.replace('@', '')}`;
+                        btn.style.backgroundColor = '#26A5E4';
+                        btn.innerHTML = `<span><i class="fa-brands fa-telegram mr-2"></i> Telegram (${soc.user})</span> <i class="fa-solid fa-arrow-up-right-from-square text-xs opacity-50"></i>`;
+                    } else if (soc.type === 'tt') {
+                        btn.href = `https://www.tiktok.com/${soc.user.startsWith('@') ? soc.user : '@' + soc.user}`;
+                        btn.style.backgroundColor = '#000000';
+                        btn.innerHTML = `<span><i class="fa-brands fa-tiktok mr-2"></i> TikTok (${soc.user})</span> <i class="fa-solid fa-arrow-up-right-from-square text-xs opacity-50"></i>`;
+                    }
+                    socialsBox.appendChild(btn);
+                });
+            }
+        }
+
+        searchInput.oninput = (e) => renderList(e.target.value);
+
+        // Initial render
+        renderList();
+    </script>
+</body>
+</html>
